@@ -23,7 +23,7 @@ def main():
     | Moderately obese     | 27.5≤BMI<40   |
     | Severely obese       | BMI≥40        |
     
-    ## BMI calculation
+    ## PT's BMI calculator
     """, strip_indent=4)
 
     info = input_group('BMI calculation', [

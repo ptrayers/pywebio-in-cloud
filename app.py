@@ -1,22 +1,28 @@
-from pywebio.input import *
-from pywebio.output import *
+import pywebio
 import random
+from pywebio.input import input, FLOAT, NUMBER
+from pywebio.output import put_text, put_html, put_markdown, put_table
 
-def main():
-    
+def guess_num():
     # Guess the number game
 
+    maxNum = 20
     guessesTaken = 0
 
-    put_markdown('Hello! What is your name?')
-    myName = input()
+    #put_markdown('Hello! What is your name?')
+    myName = input("Hello! What is your name?")
 
-    number = random.randint(1, 20)
-    put_markdown('Ok `%s`, I\'m thinking of number between 1 and `%.1f`', % (myName, number))
+    number = random.randint(1, maxNum)
+    put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
 
     for guessesTaken in range(6):
         #put_markdown('Take a guess.') # 4 spaces to indent
-        guess = input("Take a guess.", type=FLOAT)
+        try:
+            guess = input("Take a guess.", type=NUMBER)
+        except ValueError:
+            put_markdown('That\'s not a number %s!' % myName)
+            continue
+        
         #guess = int(guess)
         if guess < number:
             put_markdown('Your guess is too low.') # Eight spaces indent
@@ -28,11 +34,10 @@ def main():
 
     if guess == number:
         guessesTaken = str(guessesTaken + 1)
-        put_markdown('Good job, `%s`! You guessed number in `%.1f` guesses!' % (myName, guessesTaken))
+        put_text('Good job, %s! You guessed number in %s guesses!' % (myName, guessesTaken))
 
     if guess != number:
-        number = str(number)
-        print('Bad luck! The number I was thinking of was `%.1f`.' % (number))
+        put_text('Bad luck! The number I was thinking of was %0.f.' % (number))
     
 
 if __name__ == '__main__':
@@ -46,9 +51,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.http:
-        start_http_server(main, port=args.port)
+        start_http_server(guess_num, port=args.port)
     else:
         # Since some cloud server may close idle connections (such as heroku),
         # use `websocket_ping_interval` to  keep the connection alive
-        start_ws_server(main, port=args.port, websocket_ping_interval=30)
+        start_ws_server(guess_num, port=args.port, websocket_ping_interval=30)
 

@@ -6,38 +6,41 @@ from pywebio.output import put_text, put_html, put_markdown, put_table
 def guess_num():
     # Guess the number game
 
-    maxNum = 20
+    maxNum = 50
     guessesTaken = 0
 
     #put_markdown('Hello! What is your name?')
     myName = input("Hello! What is your name?")
 
-    number = random.randint(1, maxNum)
-    put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
+    while True:
+        number = random.randint(1, maxNum)
+        put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
 
-    for guessesTaken in range(6):
-        #put_markdown('Take a guess.') # 4 spaces to indent
-        try:
-            guess = input("Take a guess.", type=NUMBER)
-        except ValueError:
-            put_markdown('That\'s not a number %s!' % myName)
-            continue
+        for guessesTaken in range(15):
+            #put_markdown('Take a guess.') # 4 spaces to indent
+            try:
+                guess = input("Take a guess.", type=NUMBER)
+            except ValueError:
+                put_markdown('That\'s not a number %s!' % myName)
+                continue
         
-        #guess = int(guess)
-        if guess < number:
-            put_markdown('Your guess is too low.') # Eight spaces indent
-        if guess > number:
-            put_markdown('Your guess is too high.')
+            #guess = int(guess)
+            if guess < number:
+                put_markdown('Your guess is too low.') # Eight spaces indent
+            if guess > number:
+                put_markdown('Your guess is too high.')
 
+            if guess == number:
+                break
+            
         if guess == number:
-            break
+            guessesTaken = str(guessesTaken + 1)
+            put_text('Good job, %s! You guessed number in %s guesses!' % (myName, guessesTaken))
 
-    if guess == number:
-        guessesTaken = str(guessesTaken + 1)
-        put_text('Good job, %s! You guessed number in %s guesses!' % (myName, guessesTaken))
-
-    if guess != number:
-        put_text('Bad luck! The number I was thinking of was %0.f.' % (number))
+        if guess != number:
+            put_text('Bad luck! The number I was thinking of was %0.f.' % (number))
+            
+        confirm = actions('Try again?', ['Yes'])
     
 
 if __name__ == '__main__':

@@ -27,41 +27,56 @@ def guess_num():
     #put_markdown('Hello! What is your name?')
     myName = input("Hello! What is your name?")
 
-    while True:
-        number = random.randint(1, maxNum)
-        put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
+    #while True:
+    number = random.randint(1, maxNum)
+    put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
 
-        for guessesTaken in range(maxGuesses):
-            #put_markdown('Take a guess.') # 4 spaces to indent
-            try:
-                guess = input("Take a guess.", type=NUMBER)
-            except ValueError:
-                put_markdown('That\'s not a number %s!' % myName)
-                continue
-        
-            try:
-                guess = int(guess)
-            except:
-                put_markdown('That\'s not a number %s!' % myName)
-                continue
-            
-            if guess < number:
-                put_markdown('Your guess is too low. You have %s guesses left.' % (maxGuesses - guessesTaken -1)) # Eight spaces indent
-            if guess > number:
-                put_markdown('Your guess is too high. You have %s guesses left.' % (maxGuesses - guessesTaken -1))
+    for guessesTaken in range(0, maxGuesses):
 
-            if guess == number:
-                break
-            
+        guessesLeft = (maxGuesses - guessesTaken - 1)
+ 
+        inc = 0.10
+        percentGuessesLeft = guessesLeft / maxGuesses
+        status_emojis = [(1.0, ''),
+                         (inc*6, '\U0001F92D'), #\N{face with hand over mouth}'),
+                         (inc*5, '\N{thinking face}'), 
+                         (inc*4, '\U0001F92B'), #\N{shushing face}'),
+                         (inc*3, '\U0001F633'), #\N{⊛ face with open eyes and hand over mouth}'),
+                         (inc*2, '\U0001F62C'),
+                         (inc, '\U0001F631')] #\N{⊛ face with peeking eye}')]
+                         #(float('inf'), 'Severely obese')]
+
+        statusMsg = 'You have `%s` guesses left.' % (guessesLeft)
+        emoj = ''
+        for guesses, emoj in status_emojis:
+            if percentGuessesLeft <= guesses:
+                statusMsg = 'You have `%s` guesses left. %s' % (guessesLeft, emoj)
+
+
+        #put_markdown('Take a guess.') # 4 spaces to indent
+        try:
+            guess = input("Take a guess.", type=NUMBER)
+            guess = int(guess)
+        except:    
+            put_markdown('That\'s not a number %s! %s' % (myName, statusMsg))
+            continue
+
         if guess == number:
-            guessesTaken = str(guessesTaken + 1)
-            put_text('Good job, %s! You guessed number in %s guesses!' % (myName, guessesTaken))
+            break
+        elif guess < number:
+            put_markdown('Your guess is too low. ' + statusMsg)
+        elif guess > number:
+            put_markdown('Your guess is too high. ' + statusMsg)
 
-        if guess != number:
-            put_text('Bad luck! The number I was thinking of was %0.f.' % (number))
-            
-        put_buttons(op.keys(), onclick=tab_operation)
-        hold()
+    if guess == number:
+        guessesTaken = str(guessesTaken + 1)
+        put_text('Good job, %s! You guessed number in %s guesses! %s' % (myName, guessesTaken, "\U0001F60A \U0001F64C"))
+
+    if guess != number:
+        put_text('Hard luck! The number I was thinking of was %0.f. %s' % (number, "\U0001F62D"))
+
+    put_buttons(op.keys(), onclick=tab_operation)
+    hold()
 
 if __name__ == '__main__':
     import argparse

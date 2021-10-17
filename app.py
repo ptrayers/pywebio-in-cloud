@@ -20,8 +20,8 @@ def tab_operation(choice):
 def guess_num():
     # Guess the number game
 
-    maxNum = 100
-    maxGuesses = 15
+    maxNum = 50
+    maxGuesses = 12
     guessesTaken = 0
 
     #put_markdown('Hello! What is your name?')
@@ -32,6 +32,14 @@ def guess_num():
     put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
 
     for guessesTaken in range(0, maxGuesses):
+
+        #put_markdown('Take a guess.') # 4 spaces to indent
+        try:
+            guess = input("Take a guess.", type=NUMBER)
+            guess = int(guess)
+        except:    
+            put_text('That\'s not a number %s! %s' % (myName, statusMsg))
+            continue
 
         guessesLeft = (maxGuesses - guessesTaken - 1)
  
@@ -59,15 +67,8 @@ def guess_num():
             '. Should the maximum number be bigger like %s?' % (maxNum * 2),
             '. Are you remembering which numbers you entered already in your head? If it\'s too hard you can try writing them down!',
             ]
-        statusMsg = 'You have %s guesses left%s %s' % (guessesLeft, random.choice(extraMsgs), emoj)
-
-        #put_markdown('Take a guess.') # 4 spaces to indent
-        try:
-            guess = input("Take a guess.", type=NUMBER)
-            guess = int(guess)
-        except:    
-            put_text('That\'s not a number %s! %s' % (myName, statusMsg))
-            continue
+        extraMsg = random.choice(extraMsgs)
+        statusMsg = 'You have %s guesses left%s %s' % (guessesLeft, extraMsg, emoj)
 
         if guess == number:
             break

@@ -46,19 +46,27 @@ def guess_num():
                          (inc, '\U0001F631')] #\N{⊛ face with peeking eye}')]
                          #(float('inf'), 'Severely obese')]
 
-        statusMsg = 'You have `%s` guesses left.' % (guessesLeft)
         emoj = ''
         for guesses, emoj in status_emojis:
             if percentGuessesLeft <= guesses:
-                statusMsg = 'You have `%s` guesses left. %s' % (guessesLeft, emoj)
-
+                break  # emoj has been set by loop ;)
+        extraMsgs = [
+            '.', '.', '.', '.',
+            ',so you have.', ',so you have.', ',so you have.', 
+            ' in the most exciting game ever invented.', 
+            '. Do you think that %s guesses is too easy for up to %s?' % (maxGuesses, maxNum),
+            '. Do you think that %s guesses is too hard for up to %s?' % (maxGuesses, maxNum),
+            '. Should the maximum number be bigger like %s?' % (maxNum * 2),
+            '. Are you remembering which numbers you entered already in your head? If it\'s too hard you can try writing them down!',
+            ]
+        statusMsg = 'You have %s guesses left%s %s' % (guessesLeft, random.choice(extraMsgs), emoj)
 
         #put_markdown('Take a guess.') # 4 spaces to indent
         try:
             guess = input("Take a guess.", type=NUMBER)
             guess = int(guess)
         except:    
-            put_markdown('That\'s not a number %s! %s' % (myName, statusMsg))
+            put_text('That\'s not a number %s! %s' % (myName, statusMsg))
             continue
 
         if guess == number:

@@ -20,26 +20,18 @@ def tab_operation(choice):
 def guess_num():
     # Guess the number game
 
-    maxNum = 50
-    maxGuesses = 12
+    maxNum = 100
+    maxGuesses = 15
     guessesTaken = 0
 
     #put_markdown('Hello! What is your name?')
     myName = input("Hello! What is your name?")
 
     #while True:
-    number = random.randint(1, maxNum)
+    number = 50 #random.randint(1, maxNum)
     put_markdown('Ok %s, I\'m thinking of number between 1 and %.0f' % (myName, maxNum))
 
     for guessesTaken in range(0, maxGuesses):
-
-        #put_markdown('Take a guess.') # 4 spaces to indent
-        try:
-            guess = input("Take a guess.", type=NUMBER)
-            guess = int(guess)
-        except:    
-            put_text('That\'s not a number %s! %s' % (myName, statusMsg))
-            continue
 
         guessesLeft = (maxGuesses - guessesTaken - 1)
  
@@ -67,9 +59,17 @@ def guess_num():
             '. Should the maximum number be bigger like %s?' % (maxNum * 2),
             '. Are you remembering which numbers you entered already in your head? If it\'s too hard you can try writing them down!',
             ]
-        extraMsg = random.choice(extraMsgs)
-        statusMsg = 'You have %s guesses left%s %s' % (guessesLeft, extraMsg, emoj)
+        statusMsg = 'You have %s guesses left%s %s' % (guessesLeft, random.choice(extraMsgs), emoj)
 
+        #put_markdown('Take a guess.') # 4 spaces to indent
+        try:
+            guess = input("Take a guess.", type=NUMBER)
+            guess = int(guess)
+        except:    
+            put_text('That\'s not a number %s! %s' % (myName, statusMsg))
+            continue
+
+            
         if guess == number:
             break
         elif guess < number:
@@ -79,9 +79,11 @@ def guess_num():
 
     if guess == number:
         guessesTaken = str(guessesTaken + 1)
-        put_text('Good job, %s! You guessed number in %s guesses! %s' % (myName, guessesTaken, "\U0001F60A \U0001F64C"))
-
-    if guess != number:
+        #put_text('Good job, %s! You guessed number in %s guesses! %s' % (myName, guessesTaken, "\U0001F60A \U0001F64C"))
+        #put_text('\U0001F64C').style('font-size: 144px')
+        put_text('Good job, %s! You guessed Daddy\'s age today! %s' % (myName, "\U0001F60A \U0001F64C"))
+        put_text('\U0001F388 \U00000035 \U00000030 \U0001F389').style('font-size: 144px')
+    else:
         put_text('Hard luck! The number I was thinking of was %0.f. %s' % (number, "\U0001F62D"))
 
     put_buttons(op.keys(), onclick=tab_operation)

@@ -4,7 +4,6 @@
 # 2. Reorg code: standalone, server versions
 # 3. Clean up cloud app
 
-
 import pywebio
 import random
 from pywebio.input import *
@@ -88,17 +87,18 @@ def guess_num():
     else:
         put_text('Hard luck! The number I was thinking of was %0.f. %s' % (number, "\U0001F62D"))
 
+
 def times_tables():
     # times tables
 
     maxQuestions = 10
-    maxSeconds = 30
+    maxSeconds = 60
     times = 8  # x time tables
     maxNum = 12  # max number the user is asked to multiply times with 
 
     #put_markdown('Hello! What is your name?')
     myName = "Adam" # input("Hello! What is your name?")
-    put_markdown('You will have about %.0f minutes to get as many questions as possible correct, starting from time you answer the first one' % (maxSeconds / 60))
+    put_markdown('You will get %.0f minutes to get as many questions as possible correct, starting from time you answer the first one' % (maxSeconds / 60))
 
     #while True:
     #for questions in range(0, maxQuestions):
@@ -129,7 +129,11 @@ def times_tables():
             start = timer()
             firstIter = False
     end = timer()
-    put_text('You got %.0f questions right and only %.0f wrong in %.0f seconds' % (correctAnswers, incorrectAnswers, (end - start))) # Time in seconds, e.g. 5.38091952400282
+    if incorrectAnswers == 0:
+        put_text('You got all %.0f questions right in %.0f seconds.' % (correctAnswers, (end - start)))
+        put_text('\U0001F64C').style('font-size: 144px')
+    else:
+        put_text('You got %.0f questions right and only %.0f wrong in %.0f seconds' % (correctAnswers,incorrectAnswers, (end - start))) # Time in seconds, e.g. 5.38091952400282
 
 
 if __name__ == '__main__':

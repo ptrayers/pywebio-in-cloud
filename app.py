@@ -10,6 +10,7 @@ import random
 from pywebio.input import *
 from pywebio.output import put_text, put_html, put_markdown, put_table, put_buttons
 from pywebio.session import *
+from timeit import default_timer as timer
 
 op = {}
 op['Try Again'] = 'window.location.reload()'
@@ -91,14 +92,21 @@ def times_tables():
     # times tables
 
     maxQuestions = 10
+    maxSeconds = 30
     times = 8  # x time tables
     maxNum = 12  # max number the user is asked to multiply times with 
 
     #put_markdown('Hello! What is your name?')
     myName = "Adam" # input("Hello! What is your name?")
+    put_markdown('You will have about %.0f minutes to get as many questions as possible correct, starting from time you answer the first one' % (maxSeconds / 60))
 
     #while True:
-    for questions in range(0, maxQuestions):
+    #for questions in range(0, maxQuestions):
+    correctAnswers = 0
+    incorrectAnswers = 0
+    start = 0
+    firstIter = True
+    while ( (timer() - start <= maxSeconds) or firstIter):
         number = random.randint(1, maxNum)
         answer = times * number
 
@@ -112,8 +120,16 @@ def times_tables():
 
         if userAnswer == answer:
             put_text('Correct')
+            correctAnswers += 1
         else:
             put_text('Incorrect')
+            incorrectAnswers += 1
+        
+        if firstIter:
+            start = timer()
+            firstIter = False
+    end = timer()
+    put_text('You got %.0f questions right and only %.0f wrong in %.0f seconds' % (correctAnswers, incorrectAnswers, (end - start))) # Time in seconds, e.g. 5.38091952400282
 
 
 if __name__ == '__main__':

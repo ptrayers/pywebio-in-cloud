@@ -4,6 +4,7 @@
 # 2. Reorg code: standalone, server versions
 # 3. Clean up cloud app
 
+
 import pywebio
 import random
 from pywebio.input import *
@@ -88,12 +89,13 @@ def guess_num():
         put_text('Hard luck! The number I was thinking of was %0.f. %s' % (number, "\U0001F62D"))
 
 
-def times_tables():
+def times_tables(timesList, weightsList):
     # times tables
 
     maxQuestions = 10
     maxSeconds = 60
-    times = 8  # x time tables
+ 
+    # random.choices(timesList, weights=weightsList, k=1)[0]  # x time tables
     maxNum = 12  # max number the user is asked to multiply times with 
 
     #put_markdown('Hello! What is your name?')
@@ -108,6 +110,9 @@ def times_tables():
     firstIter = True
     while ( (timer() - start <= maxSeconds) or firstIter):
         number = random.randint(1, maxNum)
+        times =  random.choices((8,9), weights=(0.50, 0.50), k=1)
+        print (times, times[0], times[0] * number)
+        times = times[0]
         answer = times * number
 
         #put_markdown('Take a guess.') # 4 spaces to indent
@@ -147,7 +152,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.http:
-        start_http_server(times_tables, port=args.port)
+        start_http_server(times_tables(timesList=(8,9), weightsList=(0.50, 0.50)), 
+                          port=args.port)
     else:
         # Since some cloud server may close idle connections (such as heroku),
         # use `websocket_ping_interval` to  keep the connection alive
